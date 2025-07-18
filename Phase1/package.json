@@ -1,0 +1,23 @@
+{
+  "name": "chaibackend",
+  "version": "1.0.0",
+  "description": "a basic app to deploy",
+  "keywords": [
+    "node",
+    "chai"
+  ],
+  "license": "ISC",
+  "author": "tushar tanwar",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "start": "dotenvx run -- node index.js"
+  },
+  "dependencies": {
+    "@dotenvx/dotenvx": "^1.48.0",
+    "dotenv": "^16.6.0",
+    "express": "^5.1.0",
+    "mongoose": "^8.16.1",
+    "nodemon": "^3.1.10"
+  }
+}
