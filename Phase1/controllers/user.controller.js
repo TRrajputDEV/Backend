@@ -1,10 +1,21 @@
 
 const ping =  (req, res)=>{
-    return res.send('This is the response route setted by the router')
+    res.send('This is the response route setted by the router')
 }
+
 const home = (req, res)=>{
-    return res.send('This is the res from the home route setted in the home and user')
-    
+    if(req.method == 'GET'){
+        res.status(200).send("this is a GET request on the Home page.")
+        
+    }else if(req.method == 'POST'){
+        return res.send("this is an POST request.")
+    }else if(req.method == 'HEAD'){
+        res.set('X-custom-Header', 'Alive');
+        res.status(204).end();
+    }
+    else{
+        res.send(`method is ${req.method}`);
+    }
 }
 
 export{ping, home}
