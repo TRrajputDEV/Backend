@@ -1,3 +1,4 @@
+import { name } from "ejs";
 
 const ping =  (req, res)=>{
     res.send('This is the response route setted by the router')
@@ -18,4 +19,8 @@ const home = (req, res)=>{
     }
 }
 
-export{ping, home}
+const ejsEnginePage = (req,res)=>{
+    res.render('index', {name: 'Tushar'});
+}
+
+export{ping, home,ejsEnginePage }
