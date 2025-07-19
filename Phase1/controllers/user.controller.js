@@ -5,8 +5,8 @@ const ping =  (req, res)=>{
 
 const home = (req, res)=>{
     if(req.method == 'GET'){
-        res.status(200).send("this is a GET request on the Home page.")
-        
+        console.log(req.requestTime);
+        res.status(200).send(`this is a GET request on the Home page at ${req.requestTime}`)
     }else if(req.method == 'POST'){
         return res.send("this is an POST request.")
     }else if(req.method == 'HEAD'){

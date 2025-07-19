@@ -14,3 +14,5 @@ import userrouter from './routes/user.route.js';
 import productrouter from './routes/products.route.js'
 app.use("/api/v1/user", userrouter)
 app.use("/api/v1/product", productrouter)
+/*
+Express is a routing and middleware web framework that has minimal functionality of its own: An Express application is essentially a series of middleware function calls. */
