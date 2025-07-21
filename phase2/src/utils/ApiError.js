@@ -1,6 +1,6 @@
 /* in this ApiErrors Utility we gonna inheri the error the base class and we gonna override it with our own response */
 
-class ApiErrors extends Error{
+class ApiError extends Error{
     constructor(
         statusCode,
         message = "Something went wrong",
@@ -21,4 +21,4 @@ class ApiErrors extends Error{
         }
     }
 }
-export {ApiErrors};
+export {ApiError};
