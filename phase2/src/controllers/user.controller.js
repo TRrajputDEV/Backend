@@ -1,12 +1,10 @@
-import {asyncHandler} from '../utils/asyncHandler';
-import {ApiError} from '../utils/ApiError';
-import {ApiResponse} from '../utils/ApiResponse';
-import jwt from 'jsonwebtoken';
-import mongoose from 'mongoose';
-import { User } from '../models/user.model';
+import {asyncHandler} from '../utils/asyncHandler.js';
+import {ApiError} from '../utils/ApiError.js';
+import {ApiResponse} from '../utils/ApiResponse.js';
+import { User } from '../models/user.model.js';
 
 const registerUser = asyncHandler(async(req, res)=>{
-    const{fullname, username, email, password } = req.body;
+    const{ fullname, username, email, password } = req.body;
     console.log("fullname: ", fullname, "email: ", email);
 
     // check if all required fields are there....
@@ -53,3 +51,4 @@ const logoutUser = asyncHandler(async(req, res)=>{
 
 })
 
+export {registerUser}
