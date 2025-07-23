@@ -130,7 +130,58 @@ const loginUser = asyncHandler(async (req, res) => {
 })
 
 const logoutUser = asyncHandler(async (req, res) => {
-    
+    // remove the refreshtoken from db
+    await User.findByIdAndUpdate(
+        req.user._id,
+        {
+            $unset: {
+                refreshToken: 1
+            }
+        },
+        {
+            new: true
+        }
+    )
+
+    const options = {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'strict'
+    }
+
+    return res
+    .status(200)
+    .clearCookie("accessToken", options)
+    .clearCookie("refershToken", options)
+    .json(new ApiResponse(200, {}, "User logged Out"))
+
 })
 
-export { registerUser, loginUser }
+const changeCurrentPassword = asyncHandler(async (req, res) => {
+    const { oldPassword, newPassword } = req.body;
+    const user = await User.findById(req.user?._id);
+    const isPasswordCorrect = await user.isPasswordCorrect(oldPassword);
+
+    if (!isPasswordCorrect) {
+        throw new ApiError(400, "Invalid Old password")
+    }
+
+    user.password = newPassword;
+    await user.save({
+        validateBeforeSave: false
+    });
+
+    return res
+        .status(200)
+        .json(new ApiResponse(200, {}, "password changed sucessfully")
+        )
+})
+
+const getCurrentUser = asyncHandler(async (req, res) => {
+    return res
+        .status(200)
+        .json(new ApiResponse(200, req.user, "Current user fetched"))
+})
+
+
+export { registerUser, loginUser ,logoutUser, changeCurrentPassword, getCurrentUser }
