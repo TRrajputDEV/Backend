@@ -1,1 +1,1 @@
-export const DB_NAME = "Phase-2"
+export const DB_NAME = "backend"

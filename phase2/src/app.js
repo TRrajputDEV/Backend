@@ -17,9 +17,10 @@ app.use(express.urlencoded({
 }))
 // Logger - config.
 app.use(morgan('combined'));
-
+app.use(cookieParser());
 //Routes Segregations
 import userRouter from './routes/user.routes.js'
+import cookieParser from 'cookie-parser';
 // Route declaration
 app.use('/api/v1/users', userRouter);
 
