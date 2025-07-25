@@ -46,28 +46,41 @@ export const AuthProvider = ({ children }) => {
     };
 
 
-    const register = async (userData) => {
-        try {
-            setError(null);
-            const response = await apiService.register(userData);
-            setUser(response.data);
-            return { success: true };
-        } catch (error) {
-            setError(error.message);
-            return { success: false, error: error.message };
-        }
-    };
-
+const register = async (userData) => {
+    try {
+        setError(null);
+        const response = await apiService.register(userData);
+        
+        // 🔥 FIX: Handle the response structure exactly like login
+        const { user, AccessToken, RefreshToken } = response.data;
+        
+        // Save tokens (your registration returns them)
+        localStorage.setItem('accessToken', AccessToken);
+        localStorage.setItem('refreshToken', RefreshToken);
+        
+        setUser(user); // ✅ Set the user object, not the entire response
+        
+        return { success: true, user };
+    } catch (error) {
+        setError(error.message);
+        return { success: false, error: error.message };
+    }
+};
     const logout = async () => {
-        try {
-            await apiService.logout();
-            setUser(null);
-            return { success: true };
-        } catch (error) {
-            setError(error.message);
-            return { success: false, error: error.message };
-        }
-    };
+    try {
+        await apiService.logout();
+        
+        // Clear tokens from localStorage
+        localStorage.removeItem('accessToken');
+        localStorage.removeItem('refreshToken');
+        
+        setUser(null);
+        return { success: true };
+    } catch (error) {
+        setError(error.message);
+        return { success: false, error: error.message };
+    }
+};
 
     const changePassword = async (passwordData) => {
         try {
