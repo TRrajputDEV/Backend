@@ -8,7 +8,6 @@ export const AuthContext = createContext(null);
 // AuthProvider component
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
-    const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
     // Check if user is authenticated on app load
@@ -18,27 +17,34 @@ export const AuthProvider = ({ children }) => {
 
     const checkAuth = async () => {
         try {
-            setLoading(true);
             const response = await apiService.getCurrentUser();
             setUser(response.data);
         } catch (error) {
             setUser(null);
-        } finally {
-            setLoading(false);
         }
+
     };
 
     const login = async (credentials) => {
         try {
             setError(null);
             const response = await apiService.login(credentials);
-            setUser(response.data);
-            return { success: true };
+
+            const { user, AccessToken, RefreshToken } = response.data;
+
+            // Optional: Save tokens if you're not already
+            localStorage.setItem('accessToken', AccessToken);
+            localStorage.setItem('refreshToken', RefreshToken);
+
+            setUser(user); // ✅ this fixes the dashboard state update
+
+            return { success: true, user };
         } catch (error) {
             setError(error.message);
             return { success: false, error: error.message };
         }
     };
+
 
     const register = async (userData) => {
         try {
@@ -77,7 +83,6 @@ export const AuthProvider = ({ children }) => {
     // Context value
     const value = {
         user,
-        loading,
         error,
         login,
         register,

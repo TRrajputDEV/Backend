@@ -11,19 +11,19 @@ const Login = ({ onToggleMode }) => {
         password: '',
     });
     const [isLoading, setIsLoading] = useState(false);
-    const { login, error } = useAuth(); // from custom hook
+    const { login, error, setUser } = useAuth(); // from custom hook
 
     const handleSubmit = async () => {
         setIsLoading(true);
-
         const result = await login(formData);
-
         setIsLoading(false);
 
         if (result.success) {
-            // Redirect or show toast, etc. (Handled at app-level maybe)
+            setUser(result.user); // 👈 this makes dashboard work instantly
+            // optionally navigate or show toast
         }
     };
+
 
     const handleChange = (field) => (e) => {
         setFormData((prev) => ({ ...prev, [field]: e.target.value }));

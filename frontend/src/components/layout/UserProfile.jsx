@@ -5,6 +5,17 @@ import { useAuth } from '../../hooks/useAuth';
 
 const UserProfile = ({ onChangePasswordClick }) => {
     const { user } = useAuth();
+    console.log(user);
+    if(!user){
+        return (
+            <div className="bg-white rounded-xl shadow-lg p-8 mb-8 flex items-center justify-center min-h-[200px]">
+            <div className="text-center">
+                <User className="w-12 h-12 mx-auto text-blue-400 mb-4" />
+                <p className="text-gray-700 text-lg">No user information available.</p>
+            </div>
+            </div>
+        );
+    }
 
     return (
         <div className="bg-white rounded-xl shadow-lg p-8 mb-8">

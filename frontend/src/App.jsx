@@ -10,10 +10,6 @@ import AuthPages from './components/auth/AuthPages';
 const AppContent = () => {
   const { user } = useAuth();
 
-  // if (loading) {
-  //   return <Loading />;
-  // }
-
   return user ? <Dashboard /> : <AuthPages />;
 };
 
