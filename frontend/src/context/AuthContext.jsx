@@ -1,34 +1,33 @@
-import React, { createContext, useState } from "react";
-import { apiService } from '../services/apiService';
+// context/AuthContext.jsx
+import React, { createContext, useState, useEffect } from 'react';
+import apiService from '../services/apiService';
 
 // Create the context
-const AuthContext = createContext(null);
+export const AuthContext = createContext(null);
 
 // AuthProvider component
-const AuthProvider = ({ children }) => {
-
-    // setting  up the state.
+export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
-    // check the authentication - if user is loggedIN. ?
+    // Check if user is authenticated on app load
+    useEffect(() => {
+        checkAuth();
+    }, []);
 
     const checkAuth = async () => {
         try {
-            setLoading(false);
+            setLoading(true);
             const response = await apiService.getCurrentUser();
             setUser(response.data);
-            setError(null); // clear old errors
-        } catch (err) {
+        } catch (error) {
             setUser(null);
-            setError(err.message || "Failed to authenticate.");
         } finally {
             setLoading(false);
         }
     };
 
-    // User - login 
     const login = async (credentials) => {
         try {
             setError(null);
@@ -37,14 +36,10 @@ const AuthProvider = ({ children }) => {
             return { success: true };
         } catch (error) {
             setError(error.message);
-            return {
-                success: false,
-                error: error.message
-            }
+            return { success: false, error: error.message };
         }
     };
 
-    // User - register
     const register = async (userData) => {
         try {
             setError(null);
@@ -53,33 +48,22 @@ const AuthProvider = ({ children }) => {
             return { success: true };
         } catch (error) {
             setError(error.message);
-            return {
-                success: false,
-                error: error.message
-            }
+            return { success: false, error: error.message };
         }
-    }
-
-    // User - logout
+    };
 
     const logout = async () => {
         try {
-            setError(null);
             await apiService.logout();
             setUser(null);
-            return {
-                success: true
-            }
+            return { success: true };
         } catch (error) {
             setError(error.message);
-            return {
-                success: false,
-                error: error.message
-            }
+            return { success: false, error: error.message };
         }
-    }
+    };
 
-    const changePassword = async passwordData => {
+    const changePassword = async (passwordData) => {
         try {
             setError(null);
             await apiService.changePassword(passwordData);
@@ -90,14 +74,17 @@ const AuthProvider = ({ children }) => {
         }
     };
 
-    return (
-        <AuthContext.Provider
-            value={{ user, loading, error, login, register, logout, changePassword, checkAuth }}
-        >
-            {children}
-        </AuthContext.Provider>
-    );
-};
+    // Context value
+    const value = {
+        user,
+        loading,
+        error,
+        login,
+        register,
+        logout,
+        changePassword,
+        checkAuth,
+    };
 
-// Export both context and provider
-export { AuthContext, AuthProvider };
+    return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+};

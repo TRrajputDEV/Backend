@@ -1,4 +1,4 @@
-export class ApiService {
+class ApiService {
     constructor() {
         this.baseURL = 'http://localhost:4000/api/v1';
     }
@@ -9,6 +9,7 @@ export class ApiService {
             const response = await fetch(`${this.baseURL}${endpoint}`, {
                 headers: { 'Content-Type': 'application/json', ...(options.headers || {}) },
                 ...options,
+                credentials: 'include',
             });
 
             const contentType = response.headers.get('content-type');
@@ -74,9 +75,13 @@ export class ApiService {
     async changePassword(passwordData) {
         return this.request('/users/change-password', {
             method: 'POST',
-            body: passwordData
-        })
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(passwordData)
+        });
     }
+
 
     // home - page ---- there is no  route to home on the backend API..
     // async getHome(){
@@ -84,5 +89,5 @@ export class ApiService {
     // }
 
 }
-
-export const apiService = new ApiService();
+const apiService = new ApiService();
+export default apiService
