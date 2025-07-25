@@ -1,4 +1,5 @@
-const { useState } = require("react")
+import React, { useState } from "react";
+import { Eye, EyeOff } from "lucide-react";
 
 const Input = ({
     icon: Icon,
@@ -19,7 +20,7 @@ const Input = ({
             <input
                 type={inputType}
                 placeholder={placeholder}
-                onChange={onchange}
+                onChange={onChange}
                 value={value}
                 required={required}
                 className={`w-full ${Icon ? 'pl-10' : 'pl-4'} ${type === 'password' ? 'pr-10' : 'pr-4'} py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all`}

@@ -1,9 +1,11 @@
-import React, { createContext, useState, useEffect } from "react";
+import React, { createContext, useState } from "react";
 import { apiService } from '../services/apiService';
 
-export const AuthContext = createContext(null);
+// Create the context
+const AuthContext = createContext(null);
 
-export const AuthProvider = ({ children }) => {
+// AuthProvider component
+const AuthProvider = ({ children }) => {
 
     // setting  up the state.
     const [user, setUser] = useState(null);
@@ -14,7 +16,7 @@ export const AuthProvider = ({ children }) => {
 
     const checkAuth = async () => {
         try {
-            setLoading(true);
+            setLoading(false);
             const response = await apiService.getCurrentUser();
             setUser(response.data);
             setError(null); // clear old errors
@@ -27,11 +29,12 @@ export const AuthProvider = ({ children }) => {
     };
 
     // User - login 
-    const login = async () => {
+    const login = async (credentials) => {
         try {
             setError(null);
             const response = await apiService.login(credentials);
             setUser(response.data);
+            return { success: true };
         } catch (error) {
             setError(error.message);
             return {
@@ -42,14 +45,12 @@ export const AuthProvider = ({ children }) => {
     };
 
     // User - register
-    const register = async () => {
+    const register = async (userData) => {
         try {
-
             setError(null);
             const response = await apiService.register(userData);
             setUser(response.data);
             return { success: true };
-
         } catch (error) {
             setError(error.message);
             return {
@@ -97,3 +98,6 @@ export const AuthProvider = ({ children }) => {
         </AuthContext.Provider>
     );
 };
+
+// Export both context and provider
+export { AuthContext, AuthProvider };

@@ -1,10 +1,29 @@
+// App.jsx
+import React from 'react';
+import { AuthProvider } from "./context/AuthContext";
+import { useAuth } from './hooks/useAuth';
+import Loading from './components/ui/Loading';
+import Dashboard from './components/layout/Dashboard';
+import AuthPages from './components/auth/AuthPages';
 
-function App() {
+// Main App Component (inside provider)
+const AppContent = () => {
+  const { user } = useAuth();
+
+  // if (loading) {
+  //   return <Loading />;
+  // }
+
+  return user ? <Dashboard /> : <AuthPages />;
+};
+
+// Root App Component (with provider wrapper)
+const App = () => {
   return (
-    <>
-      <h1 className='text-2xl font-sans'>This is the front end</h1>
-    </>
-  )
-}
+    <AuthProvider>
+      <AppContent />
+    </AuthProvider>
+  );
+};
 
-export default App
+export default App;
